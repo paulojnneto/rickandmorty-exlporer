@@ -3,8 +3,8 @@ class EpisodeController {
     this.getEpisode = getEpisode;
   }
 
-  async handle(response) {
-    const episode = await this.getEpisode.execute();
+  async handle(response, episodeId) {
+    const episode = await this.getEpisode.execute(episodeId);
 
     response.writeHead(200, {
       'Content-Type': 'application/json; charset=utf-8'

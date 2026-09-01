@@ -35,7 +35,7 @@ PORT=3000
 API=https://rickandmortyapi.com/api
 ```
 
-O endpoint `GET /episode` consulta `${API}/episode` e retorna somente `id` e `characters` de cada episódio retornado.
+O endpoint `GET /episode/:id` consulta `${API}/episode/:id` e retorna somente `id` e `characters` do episódio solicitado.
 
 ## Como executar
 

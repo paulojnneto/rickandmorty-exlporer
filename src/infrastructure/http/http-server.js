@@ -27,8 +27,10 @@ function createHttpServer() {
       return;
     }
 
-    if (request.method === 'GET' && requestUrl.pathname === '/episode') {
-      episodeController.handle(response).catch((error) => {
+    const episodeMatch = requestUrl.pathname.match(/^\/episode\/(\d+)$/);
+
+    if (request.method === 'GET' && episodeMatch) {
+      episodeController.handle(response, Number(episodeMatch[1])).catch((error) => {
         console.error(error);
         sendJson(response, 502, { error: 'Não foi possível consultar a API externa' });
       });
