@@ -1,0 +1,18 @@
+class EpisodeApiClient {
+  async findEpisode() {
+    if (!process.env.API) {
+      throw new Error('A variável API não foi configurada');
+    }
+
+    const endpoint = `${process.env.API.replace(/\/+$/, '')}/episode`;
+    const response = await fetch(endpoint);
+
+    if (!response.ok) {
+      throw new Error(`A API externa respondeu com status ${response.status}`);
+    }
+
+    return response.json();
+  }
+}
+
+module.exports = { EpisodeApiClient };

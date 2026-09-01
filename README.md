@@ -23,7 +23,18 @@ src/
     └── errors/
 ```
 
-O consumo da API pública será implementado posteriormente em `infrastructure/external-apis/series`, mantendo a camada de domínio independente do fornecedor externo.
+O consumo da API pública fica isolado em `infrastructure/external-apis/series`, mantendo a camada de domínio independente do fornecedor externo.
+
+## Configuração da API externa
+
+Crie um arquivo `.env` com a URL base da API:
+
+```env
+PORT=3000
+API=https://rickandmortyapi.com/api
+```
+
+O endpoint `GET /episode` consulta `${API}/episode` e retorna somente `id` e `characters` de cada episódio retornado.
 
 ## Como executar
 

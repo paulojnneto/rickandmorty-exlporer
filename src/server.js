@@ -1,3 +1,7 @@
+if (typeof process.loadEnvFile === 'function') {
+  process.loadEnvFile();
+}
+
 const { createHttpServer } = require('./infrastructure/http/http-server');
 
 const port = Number(process.env.PORT) || 3000;
