@@ -1,0 +1,11 @@
+{
+  "name": "simple-node-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend Node.js simples com servidor HTTP nativo",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  }
+}
