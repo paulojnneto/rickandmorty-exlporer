@@ -1,5 +1,6 @@
 # Simple Node Backend
 
+# Hello world
 Backend Node.js mínimo usando apenas o módulo HTTP nativo e organizado em camadas inspiradas em DDD.
 
 ## Estrutura
