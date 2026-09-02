@@ -1,6 +1,7 @@
 # Rick and Morty App
 
 Monorepo containing an independent Flutter frontend and Node.js backend.
+The Docker Compose project name is `rick-morty-explorer`.
 
 ## Project structure
 

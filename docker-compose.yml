@@ -1,3 +1,5 @@
+name: rick-morty-explorer
+
 services:
   backend:
     build: ./backend
