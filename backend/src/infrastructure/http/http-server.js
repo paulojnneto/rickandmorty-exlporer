@@ -9,13 +9,25 @@ const episodeController = new EpisodeController(getEpisode);
 
 function sendJson(response, statusCode, payload) {
   response.writeHead(statusCode, {
-    'Content-Type': 'application/json; charset=utf-8'
+    'Content-Type': 'application/json; charset=utf-8',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
   });
   response.end(JSON.stringify(payload));
 }
 
 function createHttpServer() {
   return http.createServer((request, response) => {
+    if (request.method === 'OPTIONS') {
+      response.writeHead(204, {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      });
+      response.end();
+      return;
+    }
     const requestUrl = new URL(request.url, 'http://localhost');
 
     if (request.method === 'GET' && request.url === '/') {

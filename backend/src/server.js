@@ -1,5 +1,11 @@
 if (typeof process.loadEnvFile === 'function') {
-  process.loadEnvFile();
+  try {
+    process.loadEnvFile();
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      throw error;
+    }
+  }
 }
 
 const { createHttpServer } = require('./infrastructure/http/http-server');

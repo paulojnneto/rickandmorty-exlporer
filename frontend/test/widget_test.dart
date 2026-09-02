@@ -1,30 +1,35 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:frontend/data/models/character.dart';
+import 'package:frontend/data/models/episode.dart';
+import 'package:frontend/data/repositories/episode_repository.dart';
 import 'package:frontend/main.dart';
 
+class _FakeRepository implements EpisodeRepository {
+  @override
+  Future<Episode> getEpisode(int episodeId) async => const Episode(
+    id: 28,
+    characters: [
+      Character(
+        id: 1,
+        name: 'Rick Sanchez',
+        status: 'Alive',
+        species: 'Human',
+        gender: 'Male',
+        image: null,
+      ),
+    ],
+  );
+}
+
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('busca e exibe um personagem', (tester) async {
+    await tester.pumpWidget(MyApp(repository: _FakeRepository()));
+    await tester.enterText(find.byType(TextField), '28');
+    await tester.tap(find.text('Buscar'));
+    await tester.pumpAndSettle();
+    expect(find.text('Rick Sanchez'), findsOneWidget);
+    expect(find.text('Status: Alive'), findsOneWidget);
+    expect(find.text('Imagem indisponível'), findsOneWidget);
   });
 }

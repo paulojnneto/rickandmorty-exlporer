@@ -26,4 +26,22 @@ flutter pub get
 flutter run
 ```
 
-O frontend será conectado ao backend nas próximas etapas.
+O frontend usa `http://localhost:3000` por padrão. Para execução local, é possível alterar a URL com `--dart-define=BACKEND_URL=...`.
+
+## Docker
+
+Suba os dois serviços com:
+
+```bash
+docker compose up --build
+```
+
+Depois, acesse o frontend em http://localhost:8080 e o backend em http://localhost:3000. O backend consulta a API externa usando `API`; o navegador conversa somente com o backend. Para trocar a URL usada no build do frontend, use `BACKEND_URL`, por exemplo: `BACKEND_URL=http://localhost:3000 docker compose up --build`.
+
+## Testes e análise
+
+```bash
+cd frontend
+flutter analyze
+flutter test
+```

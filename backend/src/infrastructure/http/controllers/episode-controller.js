@@ -7,7 +7,8 @@ class EpisodeController {
     const episode = await this.getEpisode.execute(episodeId);
 
     response.writeHead(200, {
-      'Content-Type': 'application/json; charset=utf-8'
+      'Content-Type': 'application/json; charset=utf-8',
+      'Access-Control-Allow-Origin': '*'
     });
     response.end(JSON.stringify(episode));
   }
