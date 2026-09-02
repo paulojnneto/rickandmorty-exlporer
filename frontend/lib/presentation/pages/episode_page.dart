@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../data/repositories/episode_repository.dart';
 import '../controllers/episode_controller.dart';
 import '../widgets/character_card.dart';
+import 'loading_page.dart';
 
 class EpisodePage extends StatefulWidget {
   const EpisodePage({super.key, required this.repository});
@@ -14,6 +15,7 @@ class EpisodePage extends StatefulWidget {
 class _EpisodePageState extends State<EpisodePage> {
   late final EpisodeController controller;
   final idController = TextEditingController();
+  bool _showLoading = false;
   @override
   void initState() {
     super.initState();
@@ -27,158 +29,172 @@ class _EpisodePageState extends State<EpisodePage> {
     super.dispose();
   }
 
+  Future<void> _search() async {
+    if (controller.status == EpisodeStatus.loading) return;
+    setState(() => _showLoading = true);
+    await controller.search(idController.text);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Rick and Morty Explorer')),
-      body: AnimatedBuilder(
-        animation: controller,
-        builder: (context, _) => SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1100),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Explore an episode',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  const Text('Enter an episode ID to see its characters.'),
-                  const SizedBox(height: 24),
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      const controlHeight = 56.0;
-                      final input = SizedBox(
-                        height: controlHeight,
-                        child: TextField(
-                          controller: idController,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            TextInputFormatter.withFunction((
-                              oldValue,
-                              newValue,
-                            ) {
-                              if (newValue.text.isEmpty ||
-                                  RegExp(
-                                    r'^[1-9]\d*$',
-                                  ).hasMatch(newValue.text)) {
-                                return newValue;
-                              }
-                              return oldValue;
-                            }),
-                          ],
-                          decoration: const InputDecoration(
-                            labelText: 'Episode ID',
-                            hintText: 'e.g. 28',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12),
-                              ),
-                            ),
-                          ),
-                          onSubmitted: (_) =>
-                              controller.search(idController.text),
-                        ),
-                      );
-                      final button = SizedBox(
-                        height: controlHeight,
-                        child: FilledButton.icon(
-                          style: FilledButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          onPressed: controller.status == EpisodeStatus.loading
-                              ? null
-                              : () => controller.search(idController.text),
-                          icon: controller.status == EpisodeStatus.loading
-                              ? const SizedBox.square(
-                                  dimension: 18,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Icon(Icons.search),
-                          label: const Text('Search'),
-                        ),
-                      );
-                      return constraints.maxWidth < 500
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                input,
-                                const SizedBox(height: 12),
-                                button,
-                              ],
-                            )
-                          : Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(child: input),
-                                const SizedBox(width: 12),
-                                button,
-                              ],
-                            );
-                    },
-                  ),
-                  if (controller.errorMessage != null) ...[
-                    const SizedBox(height: 18),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.errorContainer,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        controller.errorMessage!,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onErrorContainer,
-                        ),
-                      ),
-                    ),
-                  ],
-                  if (controller.status == EpisodeStatus.success &&
-                      controller.characters.isNotEmpty) ...[
-                    const SizedBox(height: 32),
+    return LoadingOverlay(
+      visible: _showLoading,
+      onFinished: () {
+        if (mounted) setState(() => _showLoading = false);
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Rick and Morty Explorer')),
+        body: AnimatedBuilder(
+          animation: controller,
+          builder: (context, _) => SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1100),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      'Characters in episode ${controller.episodeId}',
-                      style: Theme.of(context).textTheme.titleLarge,
+                      'Explore an episode',
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 8),
+                    const Text('Enter an episode ID to see its characters.'),
+                    const SizedBox(height: 24),
                     LayoutBuilder(
                       builder: (context, constraints) {
-                        final count = constraints.maxWidth >= 900
-                            ? 4
-                            : constraints.maxWidth >= 600
-                            ? 3
-                            : 2;
-                        final cardAspectRatio = constraints.maxWidth < 600
-                            ? .58
-                            : .68;
-                        return GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: count,
-                                crossAxisSpacing: 14,
-                                mainAxisSpacing: 14,
-                                childAspectRatio: cardAspectRatio,
+                        const controlHeight = 56.0;
+                        final input = SizedBox(
+                          height: controlHeight,
+                          child: TextField(
+                            controller: idController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              TextInputFormatter.withFunction((
+                                oldValue,
+                                newValue,
+                              ) {
+                                if (newValue.text.isEmpty ||
+                                    RegExp(
+                                      r'^[1-9]\d*$',
+                                    ).hasMatch(newValue.text)) {
+                                  return newValue;
+                                }
+                                return oldValue;
+                              }),
+                            ],
+                            decoration: const InputDecoration(
+                              labelText: 'Episode ID',
+                              hintText: 'e.g. 28',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(12),
+                                ),
                               ),
-                          itemCount: controller.characters.length,
-                          itemBuilder: (_, index) => CharacterCard(
-                            character: controller.characters[index],
+                            ),
+                            onSubmitted: (_) => _search(),
                           ),
                         );
+                        final button = SizedBox(
+                          height: controlHeight,
+                          child: FilledButton.icon(
+                            style: FilledButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            onPressed:
+                                controller.status == EpisodeStatus.loading
+                                ? null
+                                : _search,
+                            icon: controller.status == EpisodeStatus.loading
+                                ? const SizedBox.square(
+                                    dimension: 18,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Icon(Icons.search),
+                            label: const Text('Search'),
+                          ),
+                        );
+                        return constraints.maxWidth < 500
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  input,
+                                  const SizedBox(height: 12),
+                                  button,
+                                ],
+                              )
+                            : Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(child: input),
+                                  const SizedBox(width: 12),
+                                  button,
+                                ],
+                              );
                       },
                     ),
+                    if (controller.errorMessage != null) ...[
+                      const SizedBox(height: 18),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.errorContainer,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          controller.errorMessage!,
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onErrorContainer,
+                          ),
+                        ),
+                      ),
+                    ],
+                    if (controller.status == EpisodeStatus.success &&
+                        controller.characters.isNotEmpty) ...[
+                      const SizedBox(height: 32),
+                      Text(
+                        'Characters in episode ${controller.episodeId}',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 14),
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final count = constraints.maxWidth >= 900
+                              ? 4
+                              : constraints.maxWidth >= 600
+                              ? 3
+                              : 2;
+                          final cardAspectRatio = constraints.maxWidth < 600
+                              ? .58
+                              : .68;
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: count,
+                                  crossAxisSpacing: 14,
+                                  mainAxisSpacing: 14,
+                                  childAspectRatio: cardAspectRatio,
+                                ),
+                            itemCount: controller.characters.length,
+                            itemBuilder: (_, index) => CharacterCard(
+                              character: controller.characters[index],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           ),
