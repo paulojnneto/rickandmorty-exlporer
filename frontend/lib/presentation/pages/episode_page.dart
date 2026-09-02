@@ -55,7 +55,9 @@ class _EpisodePageState extends State<EpisodePage> {
                         decoration: const InputDecoration(
                           labelText: 'Episode ID',
                           hintText: 'e.g. 28',
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
                         ),
                         onSubmitted: (_) =>
                             controller.search(idController.text),
@@ -63,6 +65,11 @@ class _EpisodePageState extends State<EpisodePage> {
                       final button = SizedBox(
                         height: 56,
                         child: FilledButton.icon(
+                          style: FilledButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
                           onPressed: controller.status == EpisodeStatus.loading
                               ? null
                               : () => controller.search(idController.text),
@@ -88,7 +95,7 @@ class _EpisodePageState extends State<EpisodePage> {
                               ],
                             )
                           : Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(child: input),
                                 const SizedBox(width: 12),

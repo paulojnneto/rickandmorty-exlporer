@@ -31,5 +31,11 @@ void main() {
     expect(find.text('Rick Sanchez'), findsOneWidget);
     expect(find.text('Status: Alive'), findsOneWidget);
     expect(find.text('Image unavailable'), findsOneWidget);
+
+    await tester.tap(find.text('Rick Sanchez'));
+    await tester.pumpAndSettle();
+    expect(find.text('ID: 1'), findsOneWidget);
+    expect(find.text('Gender: Male'), findsNWidgets(2));
+    expect(find.text('Close'), findsOneWidget);
   });
 }
