@@ -9,10 +9,10 @@ class Character {
   });
   factory Character.fromJson(Map<String, dynamic> json) => Character(
     id: (json['id'] as num?)?.toInt() ?? 0,
-    name: json['name'] as String? ?? 'Desconhecido',
-    status: json['status'] as String? ?? 'Desconhecido',
-    species: json['species'] as String? ?? 'Desconhecida',
-    gender: json['gender'] as String? ?? 'Desconhecido',
+    name: json['name'] as String? ?? 'Unknown',
+    status: json['status'] as String? ?? 'Unknown',
+    species: json['species'] as String? ?? 'Unknown',
+    gender: json['gender'] as String? ?? 'Unknown',
     image: json['image'] as String?,
   );
   final int id;

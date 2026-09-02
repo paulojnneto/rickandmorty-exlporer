@@ -36,8 +36,8 @@ class CharacterCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               _InfoLine('Status', character.status),
-              _InfoLine('Espécie', character.species),
-              _InfoLine('Gênero', character.gender),
+              _InfoLine('Species', character.species),
+              _InfoLine('Gender', character.gender),
             ],
           ),
         ),
@@ -57,7 +57,7 @@ class _UnavailableImage extends StatelessWidget {
       children: [
         Icon(Icons.image_not_supported_outlined, size: 36),
         SizedBox(height: 6),
-        Text('Imagem indisponível'),
+        Text('Image unavailable'),
       ],
     ),
   );

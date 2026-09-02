@@ -1,12 +1,12 @@
 # Rick and Morty App
 
-Monorepo com frontend Flutter e backend Node.js. As duas aplicações são independentes e não compartilham pacotes.
+Monorepo with a Flutter frontend and Node.js backend. The applications are independent and do not share packages.
 
 ## Estrutura
 
 ```text
-backend/   # API Node.js organizada em camadas DDD
-frontend/  # Aplicação Flutter
+backend/   # Node.js API organized in DDD-inspired layers
+frontend/  # Flutter application
 ```
 
 ## Backend
@@ -16,7 +16,7 @@ cd backend
 npm start
 ```
 
-O backend usa a porta `3000` e expõe `GET /episode/:id`.
+The backend uses port `3000` and exposes `GET /episode/:id`.
 
 ## Frontend
 
@@ -26,19 +26,29 @@ flutter pub get
 flutter run
 ```
 
-O frontend usa `http://localhost:3000` por padrão. Para execução local, é possível alterar a URL com `--dart-define=BACKEND_URL=...`.
+The frontend uses `http://localhost:3000` by default. For local execution, the URL can be changed with `--dart-define=BACKEND_URL=...`.
 
 ## Docker
 
-Suba os dois serviços com:
+Start both services with:
 
 ```bash
 docker compose up --build
 ```
 
-Depois, acesse o frontend em http://localhost:8080 e o backend em http://localhost:3000. O backend consulta a API externa usando `API`; o navegador conversa somente com o backend. Para trocar a URL usada no build do frontend, use `BACKEND_URL`, por exemplo: `BACKEND_URL=http://localhost:3000 docker compose up --build`.
+Then open the frontend at http://localhost:8080 and the backend at http://localhost:3000. The backend queries the external API using `API`; the browser communicates only with the backend. To change the URL used during the frontend build, set `BACKEND_URL`, for example: `BACKEND_URL=http://localhost:3000 docker compose up --build`.
 
-## Testes e análise
+### Docker development mode with hot reload
+
+For Flutter hot reload while keeping the services in Docker, run:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+```
+
+Open http://localhost:8080. The frontend source is mounted into the container; saving a Dart file triggers hot reload. The terminal remains interactive, so `r` performs a hot reload, `R` performs a hot restart, and `q` stops Flutter. Use `docker compose -f docker-compose.yml -f docker-compose.dev.yml down` to stop the services.
+
+## Tests and analysis
 
 ```bash
 cd frontend

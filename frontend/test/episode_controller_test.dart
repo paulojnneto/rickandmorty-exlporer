@@ -16,14 +16,14 @@ class _Repository implements EpisodeRepository {
 }
 
 void main() {
-  test('valida ID vazio, positivo e inteiro', () {
+  test('validates empty, positive and whole-number IDs', () {
     expect(EpisodeController.validateId(''), isNotNull);
     expect(EpisodeController.validateId('0'), isNotNull);
     expect(EpisodeController.validateId('-1'), isNotNull);
     expect(EpisodeController.validateId('abc'), isNotNull);
     expect(EpisodeController.validateId('28'), isNull);
   });
-  test('sucesso da busca', () async {
+  test('search success', () async {
     final controller = EpisodeController(
       _Repository(
         const Episode(
@@ -45,20 +45,20 @@ void main() {
     expect(controller.status, EpisodeStatus.success);
     expect(controller.characters, hasLength(1));
   });
-  test('erro HTTP', () async {
+  test('HTTP error', () async {
     final controller = EpisodeController(
-      _Repository(const HttpAppException('Falha HTTP', 404)),
+      _Repository(const HttpAppException('HTTP failure', 404)),
     );
     await controller.search('28');
     expect(controller.status, EpisodeStatus.error);
-    expect(controller.errorMessage, 'Falha HTTP');
+    expect(controller.errorMessage, 'HTTP failure');
   });
-  test('erro de conexão', () async {
+  test('connection error', () async {
     final controller = EpisodeController(
-      _Repository(const ConnectionAppException('Sem conexão')),
+      _Repository(const ConnectionAppException('No connection')),
     );
     await controller.search('28');
     expect(controller.status, EpisodeStatus.error);
-    expect(controller.errorMessage, 'Sem conexão');
+    expect(controller.errorMessage, 'No connection');
   });
 }

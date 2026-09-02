@@ -17,8 +17,8 @@ class EpisodeRemoteDatasource {
       if (response.statusCode < 200 || response.statusCode >= 300) {
         throw HttpAppException(
           response.statusCode >= 500
-              ? 'O servidor encontrou um problema. Tente novamente.'
-              : 'Episódio não encontrado ou inválido.',
+              ? 'The server encountered a problem. Please try again.'
+              : 'Episode not found or invalid.',
           response.statusCode,
         );
       }
@@ -30,23 +30,19 @@ class EpisodeRemoteDatasource {
         return Episode.fromJson(json);
       } on FormatException {
         throw const InvalidResponseException(
-          'A resposta do servidor é inválida.',
+          'The server returned an invalid response.',
         );
       }
     } on TimeoutException {
       throw const TimeoutAppException(
-        'A busca demorou demais. Tente novamente.',
+        'The request took too long. Please try again.',
       );
     } on http.ClientException {
-      throw const ConnectionAppException(
-        'Não foi possível conectar ao backend.',
-      );
+      throw const ConnectionAppException('Could not connect to the backend.');
     } on AppException {
       rethrow;
     } catch (_) {
-      throw const ConnectionAppException(
-        'Não foi possível conectar ao backend.',
-      );
+      throw const ConnectionAppException('Could not connect to the backend.');
     }
   }
 }

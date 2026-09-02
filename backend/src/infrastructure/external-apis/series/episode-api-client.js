@@ -1,7 +1,7 @@
 class EpisodeApiClient {
   async findEpisode(episodeId) {
     if (!process.env.API) {
-      throw new Error('A variável API não foi configurada');
+      throw new Error('The API variable is not configured');
     }
 
     const endpoint = `${process.env.API.replace(/\/+$/, '')}/episode/${episodeId}`;

@@ -23,13 +23,13 @@ class _FakeRepository implements EpisodeRepository {
 }
 
 void main() {
-  testWidgets('busca e exibe um personagem', (tester) async {
+  testWidgets('searches for and displays a character', (tester) async {
     await tester.pumpWidget(MyApp(repository: _FakeRepository()));
     await tester.enterText(find.byType(TextField), '28');
-    await tester.tap(find.text('Buscar'));
+    await tester.tap(find.text('Search'));
     await tester.pumpAndSettle();
     expect(find.text('Rick Sanchez'), findsOneWidget);
     expect(find.text('Status: Alive'), findsOneWidget);
-    expect(find.text('Imagem indisponível'), findsOneWidget);
+    expect(find.text('Image unavailable'), findsOneWidget);
   });
 }

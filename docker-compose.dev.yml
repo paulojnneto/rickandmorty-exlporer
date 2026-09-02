@@ -1,0 +1,21 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      target: build
+    command: >-
+      sh -c "flutter pub get && flutter run -d web-server
+      --web-hostname 0.0.0.0 --web-port 8080
+      --dart-define=BACKEND_URL=http://localhost:3000"
+    ports: !override
+      - "8080:8080"
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./frontend:/app
+      - frontend_pub_cache:/root/.pub-cache
+      - frontend_dart_tool:/app/.dart_tool
+
+volumes:
+  frontend_pub_cache:
+  frontend_dart_tool:

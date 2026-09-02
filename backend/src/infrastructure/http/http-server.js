@@ -45,12 +45,12 @@ function createHttpServer() {
     if (request.method === 'GET' && episodeMatch) {
       episodeController.handle(response, Number(episodeMatch[1])).catch((error) => {
         console.error(error);
-        sendJson(response, 502, { error: 'Não foi possível consultar a API externa' });
+        sendJson(response, 502, { error: 'Could not query the external API' });
       });
       return;
     }
 
-    sendJson(response, 404, { error: 'Rota não encontrada' });
+    sendJson(response, 404, { error: 'Route not found' });
   });
 }
 

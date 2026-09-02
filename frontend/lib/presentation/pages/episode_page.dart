@@ -41,13 +41,11 @@ class _EpisodePageState extends State<EpisodePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Explore um episódio',
+                    'Explore an episode',
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Informe o ID para ver os personagens que participaram dele.',
-                  ),
+                  const Text('Enter an episode ID to see its characters.'),
                   const SizedBox(height: 24),
                   LayoutBuilder(
                     builder: (context, constraints) {
@@ -55,8 +53,8 @@ class _EpisodePageState extends State<EpisodePage> {
                         controller: idController,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          labelText: 'ID do episódio',
-                          hintText: 'Ex.: 28',
+                          labelText: 'Episode ID',
+                          hintText: 'e.g. 28',
                           border: OutlineInputBorder(),
                         ),
                         onSubmitted: (_) =>
@@ -77,7 +75,7 @@ class _EpisodePageState extends State<EpisodePage> {
                                   ),
                                 )
                               : const Icon(Icons.search),
-                          label: const Text('Buscar'),
+                          label: const Text('Search'),
                         ),
                       );
                       return constraints.maxWidth < 500
@@ -120,7 +118,7 @@ class _EpisodePageState extends State<EpisodePage> {
                       controller.characters.isNotEmpty) ...[
                     const SizedBox(height: 32),
                     Text(
-                      'Personagens do episódio ${controller.episodeId}',
+                      'Characters in episode ${controller.episodeId}',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 14),

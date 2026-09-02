@@ -1,7 +1,7 @@
 class CharacterApiClient {
   async findCharacters(characterIds) {
     if (!process.env.API) {
-      throw new Error('A variável API não foi configurada');
+      throw new Error('The API variable is not configured');
     }
 
     if (characterIds.length === 0) {

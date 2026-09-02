@@ -14,9 +14,9 @@ class EpisodeController extends ChangeNotifier {
   int? episodeId;
   static String? validateId(String value) {
     final input = value.trim();
-    if (input.isEmpty) return 'Informe o ID de um episódio.';
+    if (input.isEmpty) return 'Please enter an episode ID.';
     if (!RegExp(r'^\d+$').hasMatch(input) || int.tryParse(input) == 0) {
-      return 'Digite somente um número inteiro positivo.';
+      return 'Please enter a positive whole number.';
     }
     return null;
   }
@@ -39,14 +39,14 @@ class EpisodeController extends ChangeNotifier {
       characters = result.characters;
       status = EpisodeStatus.success;
       if (characters.isEmpty) {
-        errorMessage = 'Este episódio não possui personagens.';
+        errorMessage = 'This episode has no characters.';
       }
     } on AppException catch (error) {
       status = EpisodeStatus.error;
       errorMessage = error.message;
     } catch (_) {
       status = EpisodeStatus.error;
-      errorMessage = 'Não foi possível concluir a busca.';
+      errorMessage = 'The search could not be completed.';
     }
     notifyListeners();
   }
