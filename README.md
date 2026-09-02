@@ -1,57 +1,29 @@
-# Simple Node Backend
+# Rick and Morty App
 
-# Hello world
-Backend Node.js mínimo usando apenas o módulo HTTP nativo e organizado em camadas inspiradas em DDD.
+Monorepo com frontend Flutter e backend Node.js. As duas aplicações são independentes e não compartilham pacotes.
 
 ## Estrutura
 
 ```text
-src/
-├── domain/                 # Regras e conceitos centrais do domínio
-│   ├── entities/           # Entidades do seriado
-│   ├── repositories/       # Contratos para persistência/consulta
-│   └── services/           # Serviços de domínio
-├── application/            # Casos de uso e DTOs
-│   ├── use-cases/
-│   └── dtos/
-├── infrastructure/         # Detalhes externos e adaptadores
-│   ├── config/
-│   ├── external-apis/series/ # Cliente da API pública do seriado
-│   └── http/
-│       ├── controllers/
-│       └── routes/
-└── shared/                 # Recursos compartilhados
-    └── errors/
+backend/   # API Node.js organizada em camadas DDD
+frontend/  # Aplicação Flutter
 ```
 
-O consumo da API pública fica isolado em `infrastructure/external-apis/series`, mantendo a camada de domínio independente do fornecedor externo.
-
-## Configuração da API externa
-
-Crie um arquivo `.env` com a URL base da API:
-
-```env
-PORT=3000
-API=https://rickandmortyapi.com/api
-```
-
-O endpoint `GET /episode/:id` consulta `${API}/episode/:id`, extrai os IDs dos personagens e faz uma segunda consulta em `${API}/character/:ids`. A resposta contém somente `id` e `characters` com os dados completos dos personagens.
-
-## Como executar
+## Backend
 
 ```bash
+cd backend
 npm start
 ```
 
-Para desenvolvimento, com reinício automático:
+O backend usa a porta `3000` e expõe `GET /episode/:id`.
+
+## Frontend
 
 ```bash
-npm run dev
+cd frontend
+flutter pub get
+flutter run
 ```
 
-O servidor usa a porta `3000` por padrão. Para alterar, defina a variável `PORT`.
-
-## Rotas
-
-- `GET /` — mensagem de boas-vindas
-- `GET /health` — status da aplicação
+O frontend será conectado ao backend nas próximas etapas.

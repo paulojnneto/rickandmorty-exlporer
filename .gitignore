@@ -3,3 +3,11 @@ node_modules/
 .env.*
 !.env.example
 npm-debug.log*
+
+# Flutter
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+frontend/.idea/
