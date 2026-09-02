@@ -1,9 +1,10 @@
 const http = require('node:http');
 const { EpisodeApiClient } = require('../external-apis/series/episode-api-client');
+const { CharacterApiClient } = require('../external-apis/series/character-api-client');
 const { GetEpisode } = require('../../application/use-cases/get-episode');
 const { EpisodeController } = require('./controllers/episode-controller');
 
-const getEpisode = new GetEpisode(new EpisodeApiClient());
+const getEpisode = new GetEpisode(new EpisodeApiClient(), new CharacterApiClient());
 const episodeController = new EpisodeController(getEpisode);
 
 function sendJson(response, statusCode, payload) {

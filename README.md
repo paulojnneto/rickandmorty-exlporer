@@ -35,7 +35,7 @@ PORT=3000
 API=https://rickandmortyapi.com/api
 ```
 
-O endpoint `GET /episode/:id` consulta `${API}/episode/:id` e retorna somente `id` e `characters` do episódio solicitado.
+O endpoint `GET /episode/:id` consulta `${API}/episode/:id`, extrai os IDs dos personagens e faz uma segunda consulta em `${API}/character/:ids`. A resposta contém somente `id` e `characters` com os dados completos dos personagens.
 
 ## Como executar
 
