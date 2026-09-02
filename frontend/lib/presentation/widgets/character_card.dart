@@ -118,6 +118,14 @@ class _CharacterCardState extends State<CharacterCard> {
                 _DialogInfoLine('Status', character.status),
                 _DialogInfoLine('Species', character.species),
                 _DialogInfoLine('Gender', character.gender),
+                const SizedBox(height: 8),
+                if (_samePlace(character.origin, character.location))
+                  _PlaceInfo('Origin/Current Location', character.origin)
+                else ...[
+                  _PlaceInfo('Origin', character.origin),
+                  const SizedBox(height: 10),
+                  _PlaceInfo('Current Location', character.location),
+                ],
               ],
             ),
           ),
@@ -131,6 +139,37 @@ class _CharacterCardState extends State<CharacterCard> {
       ),
     );
   }
+}
+
+bool _samePlace(Place first, Place second) =>
+    first.name == second.name &&
+    first.type == second.type &&
+    first.dimension == second.dimension;
+
+class _PlaceInfo extends StatelessWidget {
+  const _PlaceInfo(this.label, this.place);
+  final String label;
+  final Place place;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 6),
+        _DialogInfoLine('Name', place.name),
+        _DialogInfoLine('Type', place.type),
+        _DialogInfoLine('Dimension', place.dimension),
+      ],
+    ),
+  );
 }
 
 class _DialogInfoLine extends StatelessWidget {

@@ -17,6 +17,16 @@ class _FakeRepository implements EpisodeRepository {
         species: 'Human',
         gender: 'Male',
         image: null,
+        origin: Place(
+          name: 'Earth',
+          type: 'Planet',
+          dimension: 'Dimension C-137',
+        ),
+        location: Place(
+          name: 'Citadel of Ricks',
+          type: 'Space station',
+          dimension: 'unknown',
+        ),
       ),
     ],
   );
