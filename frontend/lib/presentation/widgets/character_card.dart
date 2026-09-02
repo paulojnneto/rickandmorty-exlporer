@@ -40,7 +40,10 @@ class _CharacterCardState extends State<CharacterCard> {
             ),
           ),
           child: InkWell(
-            onTap: () => _showCharacterDialog(context),
+            onTap: () {
+              setState(() => _isHovered = false);
+              _showCharacterDialog(context);
+            },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -90,6 +93,7 @@ class _CharacterCardState extends State<CharacterCard> {
 
     showDialog<void>(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text(character.name),
         content: SingleChildScrollView(

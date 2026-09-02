@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../data/repositories/episode_repository.dart';
 import '../controllers/episode_controller.dart';
 import '../widgets/character_card.dart';
@@ -55,6 +56,20 @@ class _EpisodePageState extends State<EpisodePage> {
                         child: TextField(
                           controller: idController,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            TextInputFormatter.withFunction((
+                              oldValue,
+                              newValue,
+                            ) {
+                              if (newValue.text.isEmpty ||
+                                  RegExp(
+                                    r'^[1-9]\d*$',
+                                  ).hasMatch(newValue.text)) {
+                                return newValue;
+                              }
+                              return oldValue;
+                            }),
+                          ],
                           decoration: const InputDecoration(
                             labelText: 'Episode ID',
                             hintText: 'e.g. 28',
