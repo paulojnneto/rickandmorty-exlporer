@@ -10,6 +10,10 @@ The project includes a reusable portal loading overlay.
 - Docker Desktop, only if you want to use the Docker workflow
 - A backend reachable through `GET /episode/:id`
 
+The frontend depends on `http ^1.3.0`, `flutter_dotenv ^5.2.1`,
+`flutter_svg ^2.0.17`, and `cupertino_icons ^1.0.8`. Test-only dependencies
+include `flutter_test` and `flutter_lints`.
+
 Check the local Flutter installation with:
 
 ```bash
@@ -19,15 +23,35 @@ flutter devices
 
 ## Backend configuration
 
-The backend URL is supplied at build/run time with `BACKEND_URL`:
+The frontend loads `BACKEND_URL` from `.env` using `flutter_dotenv`:
+
+```bash
+cp .env.example .env
+```
+
+On PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+This copy step is required before the first run so that Flutter can bundle
+the `.env` file and `flutter_dotenv` can consume `BACKEND_URL`.
+
+The default value is:
 
 ```text
 http://localhost:3000
 ```
 
-This is the default value. For Flutter Web, the backend must allow requests
-from the app origin through CORS. The URL is compiled into the Flutter app;
-changing it requires a new run or build.
+The repository includes this non-secret local configuration. Do not store
+credentials or private tokens in `.env`, because Flutter Web and mobile app
+configuration can be inspected by users.
+
+For Flutter Web, the backend must allow requests from the app origin through
+CORS. A `--dart-define=BACKEND_URL=...` value takes precedence over `.env` and
+is useful for CI, Docker, or platform-specific builds. The value is compiled
+into the Flutter app; changing it requires a new run or build.
 
 ## Run locally
 

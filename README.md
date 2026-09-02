@@ -37,6 +37,7 @@ Declared in `frontend/pubspec.yaml`:
 
 - Flutter SDK (`flutter`), including Material and Cupertino support.
 - `http ^1.3.0` for HTTP requests from Flutter to the backend.
+- `flutter_dotenv ^5.2.1` for loading the frontend `.env` configuration.
 - `flutter_svg ^2.0.17` for SVG asset support retained in the project.
 - `cupertino_icons ^1.0.8` for Cupertino icons.
 - Development-only: `flutter_test` and `flutter_lints ^6.0.0`.
@@ -64,6 +65,9 @@ The backend currently has no third-party runtime npm dependencies. It uses:
 - The Flutter app calls the local backend at `http://localhost:3000` by
   default. For Web, the backend must be reachable from the browser and allow
   CORS requests.
+- The frontend reads `frontend/.env` through `flutter_dotenv`. Its
+  `BACKEND_URL` value is used unless a `--dart-define=BACKEND_URL=...` value is
+  provided; the build-time define takes precedence.
 - No database, cache, authentication provider, message broker, or cloud
   storage is required by the current implementation.
 
@@ -170,14 +174,31 @@ environment variable. The default Docker value is
 
 ## Run the frontend individually
 
-Start the backend first, then run from the `frontend` directory:
+Start the backend first. Before running the frontend, create its environment
+file by copying the example:
 
 ```bash
 cd frontend
+cp .env.example .env
+```
+
+On PowerShell:
+
+```powershell
+cd frontend
+Copy-Item .env.example .env
+```
+
+Then install dependencies and run the app:
+
+```bash
 flutter pub get
 flutter run -d chrome \
   --dart-define=BACKEND_URL=http://localhost:3000
 ```
+
+The frontend `.env` is versioned because it currently contains only the local
+backend URL; do not put secrets in it.
 
 Run on a connected device or emulator:
 

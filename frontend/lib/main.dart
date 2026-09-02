@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'data/datasources/episode_remote_datasource.dart';
 import 'data/repositories/episode_repository_impl.dart';
 import 'data/repositories/episode_repository.dart';
 import 'presentation/pages/episode_page.dart';
 import 'presentation/pages/loading_page.dart';
 
-void main() => runApp(
-  MyApp(
-    repository: EpisodeRepositoryImpl(EpisodeRemoteDatasource()),
-    showLoading: true,
-  ),
-);
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
+  runApp(
+    MyApp(
+      repository: EpisodeRepositoryImpl(EpisodeRemoteDatasource()),
+      showLoading: true,
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key, required this.repository, this.showLoading = false});
