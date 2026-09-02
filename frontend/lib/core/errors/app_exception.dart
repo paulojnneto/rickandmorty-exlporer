@@ -16,8 +16,13 @@ class TimeoutAppException extends AppException {
 }
 
 class HttpAppException extends AppException {
-  const HttpAppException(super.message, this.statusCode);
+  const HttpAppException(
+    super.message,
+    this.statusCode, {
+    this.resource = 'episode',
+  });
   final int statusCode;
+  final String resource;
 }
 
 class InvalidResponseException extends AppException {

@@ -114,10 +114,14 @@ class _CharacterCardState extends State<CharacterCard> {
                   ),
                 ),
                 const SizedBox(height: 18),
-                _DialogInfoLine('ID', '${character.id}'),
-                _DialogInfoLine('Status', character.status),
-                _DialogInfoLine('Species', character.species),
-                _DialogInfoLine('Gender', character.gender),
+                _InfoCard(
+                  children: [
+                    _DialogInfoLine('ID', '${character.id}'),
+                    _DialogInfoLine('Status', character.status),
+                    _DialogInfoLine('Species', character.species),
+                    _DialogInfoLine('Gender', character.gender),
+                  ],
+                ),
                 const SizedBox(height: 8),
                 if (_samePlace(character.origin, character.location))
                   _PlaceInfo('Origin/Current Location', character.origin)
@@ -168,6 +172,25 @@ class _PlaceInfo extends StatelessWidget {
         _DialogInfoLine('Type', place.type),
         _DialogInfoLine('Dimension', place.dimension),
       ],
+    ),
+  );
+}
+
+class _InfoCard extends StatelessWidget {
+  const _InfoCard({required this.children});
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(12),
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      borderRadius: BorderRadius.circular(8),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: children,
     ),
   );
 }

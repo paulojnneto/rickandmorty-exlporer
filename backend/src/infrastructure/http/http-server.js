@@ -3,6 +3,7 @@ const { EpisodeApiClient } = require('../external-apis/series/episode-api-client
 const { CharacterApiClient } = require('../external-apis/series/character-api-client');
 const { GetEpisode } = require('../../application/use-cases/get-episode');
 const { EpisodeController } = require('./controllers/episode-controller');
+const { ExternalApiError } = require('../external-apis/series/external-api-error');
 
 const getEpisode = new GetEpisode(new EpisodeApiClient(), new CharacterApiClient());
 const episodeController = new EpisodeController(getEpisode);
@@ -45,7 +46,17 @@ function createHttpServer() {
     if (request.method === 'GET' && episodeMatch) {
       episodeController.handle(response, Number(episodeMatch[1])).catch((error) => {
         console.error(error);
-        sendJson(response, 502, { error: 'Could not query the external API' });
+        const isExternalError = error instanceof ExternalApiError;
+        const resource = isExternalError ? error.resource : 'episode';
+        const statusCode = isExternalError && error.status === 404 ? 404 : 502;
+        const message = statusCode === 404
+          ? `${resource[0].toUpperCase()}${resource.slice(1)} not found.`
+          : `Could not query the ${resource} service.`;
+        sendJson(response, statusCode, {
+          error: message,
+          resource,
+          status: isExternalError ? error.status : undefined
+        });
       });
       return;
     }

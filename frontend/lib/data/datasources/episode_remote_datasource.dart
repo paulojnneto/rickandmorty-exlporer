@@ -15,11 +15,19 @@ class EpisodeRemoteDatasource {
           .get(Uri.parse('${AppConstants.backendUrl}/episode/$episodeId'))
           .timeout(const Duration(seconds: 10));
       if (response.statusCode < 200 || response.statusCode >= 300) {
+        String? resource;
+        try {
+          final payload = jsonDecode(response.body);
+          resource = payload is Map<String, dynamic>
+              ? payload['resource'] as String?
+              : null;
+        } catch (_) {
+          // The status code still provides a safe fallback message.
+        }
         throw HttpAppException(
-          response.statusCode >= 500
-              ? 'The server encountered a problem. Please try again.'
-              : 'Episode not found or invalid.',
+          _messageForHttpError(response.statusCode, resource),
           response.statusCode,
+          resource: resource ?? 'episode',
         );
       }
       try {
@@ -44,5 +52,15 @@ class EpisodeRemoteDatasource {
     } catch (_) {
       throw const ConnectionAppException('Could not connect to the backend.');
     }
+  }
+
+  String _messageForHttpError(int statusCode, String? resource) {
+    final label = switch (resource) {
+      'character' => 'character',
+      'location' => 'location',
+      _ => 'episode',
+    };
+    if (statusCode == 404) return 'Could not find the requested $label.';
+    return 'Could not load the $label. Please try again.';
   }
 }

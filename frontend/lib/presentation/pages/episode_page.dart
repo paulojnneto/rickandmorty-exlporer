@@ -49,21 +49,27 @@ class _EpisodePageState extends State<EpisodePage> {
                   const SizedBox(height: 24),
                   LayoutBuilder(
                     builder: (context, constraints) {
-                      final input = TextField(
-                        controller: idController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: 'Episode ID',
-                          hintText: 'e.g. 28',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                      const controlHeight = 56.0;
+                      final input = SizedBox(
+                        height: controlHeight,
+                        child: TextField(
+                          controller: idController,
+                          keyboardType: TextInputType.number,
+                          decoration: const InputDecoration(
+                            labelText: 'Episode ID',
+                            hintText: 'e.g. 28',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(12),
+                              ),
+                            ),
                           ),
+                          onSubmitted: (_) =>
+                              controller.search(idController.text),
                         ),
-                        onSubmitted: (_) =>
-                            controller.search(idController.text),
                       );
                       final button = SizedBox(
-                        height: 56,
+                        height: controlHeight,
                         child: FilledButton.icon(
                           style: FilledButton.styleFrom(
                             shape: RoundedRectangleBorder(
@@ -136,6 +142,9 @@ class _EpisodePageState extends State<EpisodePage> {
                             : constraints.maxWidth >= 600
                             ? 3
                             : 2;
+                        final cardAspectRatio = constraints.maxWidth < 600
+                            ? .58
+                            : .68;
                         return GridView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -144,7 +153,7 @@ class _EpisodePageState extends State<EpisodePage> {
                                 crossAxisCount: count,
                                 crossAxisSpacing: 14,
                                 mainAxisSpacing: 14,
-                                childAspectRatio: .68,
+                                childAspectRatio: cardAspectRatio,
                               ),
                           itemCount: controller.characters.length,
                           itemBuilder: (_, index) => CharacterCard(
