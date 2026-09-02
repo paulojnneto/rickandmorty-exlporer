@@ -3,7 +3,14 @@ import 'package:flutter/material.dart';
 import '../../data/repositories/episode_repository.dart';
 import 'episode_page.dart';
 
-/// Camada opaca reutilizável que bloqueia a tela filha durante a animação.
+/// Reusable opaque loading layer that blocks interaction with the child.
+///
+/// NOTE: The animation currently uses a fixed 3.2-second duration. This is a
+/// temporary implementation for the loading experience. In the real
+/// implementation, the overlay should be dismissed only after the request
+/// has completed successfully and the returned data has been validated and
+/// loaded into the UI. The request state must be the source of truth rather
+/// than the animation duration.
 class LoadingOverlay extends StatefulWidget {
   const LoadingOverlay({
     super.key,

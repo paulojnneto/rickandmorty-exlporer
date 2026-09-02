@@ -1,9 +1,15 @@
 # Simple Node Backend
 
-# Hello world
-Backend Node.js mínimo usando apenas o módulo HTTP nativo e organizado em camadas inspiradas em DDD.
+Minimal Node.js HTTP API for the Rick and Morty Explorer. The backend uses
+Node's built-in HTTP server and is organized in DDD-inspired layers.
 
-## Estrutura
+## Prerequisites
+
+- Node.js 22 or newer is recommended. The Docker image uses Node.js 22.
+- npm, included with Node.js.
+- Internet access to the upstream Rick and Morty API.
+
+## Project structure
 
 ```text
 src/
@@ -24,34 +30,68 @@ src/
     └── errors/
 ```
 
-O consumo da API pública fica isolado em `infrastructure/external-apis/series`, mantendo a camada de domínio independente do fornecedor externo.
+The public API integration is isolated in
+`infrastructure/external-apis/series`, keeping the domain layer independent
+from the external provider.
 
-## Configuração da API externa
+## External API configuration
 
-Crie um arquivo `.env` com a URL base da API:
+Create a `.env` file from the provided example:
 
 ```env
 PORT=3000
 API=https://rickandmortyapi.com/api
 ```
 
-O endpoint `GET /episode/:id` consulta `${API}/episode/:id`, extrai os IDs dos personagens e faz uma segunda consulta em `${API}/character/:ids`. A resposta contém somente `id` e `characters` com os dados completos dos personagens.
-
-## Como executar
+From the `backend` directory:
 
 ```bash
+cp .env.example .env
+```
+
+On PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+The `GET /episode/:id` endpoint queries `${API}/episode/:id`, extracts the
+character IDs, and then queries `${API}/character/:ids`. The response contains
+the episode ID and the complete character data.
+
+## Run locally
+
+```bash
+npm ci
 npm start
 ```
 
-Para desenvolvimento, com reinício automático:
+For development, with automatic restart:
 
 ```bash
 npm run dev
 ```
 
-O servidor usa a porta `3000` por padrão. Para alterar, defina a variável `PORT`.
+The server uses port `3000` by default. Set `PORT` to use another port.
 
-## Rotas
+## Routes
 
 - `GET /` — mensagem de boas-vindas
 - `GET /health` — status da aplicação
+- `GET /episode/:id` — episode data and its characters
+
+## Docker
+
+Build and run the backend independently from this directory:
+
+```bash
+docker build -t rick-morty-explorer-backend .
+docker run --rm --name rick-morty-backend \
+  -e PORT=3000 \
+  -e API=https://rickandmortyapi.com/api \
+  -p 3000:3000 \
+  rick-morty-explorer-backend
+```
+
+The root `docker-compose.yml` is the recommended way to run the backend
+together with the frontend.
